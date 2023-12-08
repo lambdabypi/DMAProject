@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Energy Grid App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Adjust the number of columns as needed */
+            gap: 10px; /* Adjust the gap between buttons */
+        }
+
+        .btn {
+            position: relative;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            text-decoration: none;
+            background-color: #3498db;
+            color: #ecf0f1;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            max-width: 200px; /* Adjust the maximum width of the tooltip */
+            background-color: #333; /* Dark background color */
+            color: #080606;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px; /* Increased padding for better coverage */
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -100px; /* Adjust margin to center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            top: 100%; /* Position the tooltip below the text */
+            transform: translateX(-50%); /* Center the tooltip horizontally */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Added box shadow for a bubble effect */
+        }
+
+        .btn:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            top: -10px; /* Adjusted the distance from the top to create a connection */
+            left: 50%;
+            border-width: 10px; /* Increased the size of the arrow */
+            border-style: solid;
+            border-color: #333 transparent transparent transparent; /* Border color with transparency */
+            transform: translateX(-50%); /* Center the arrow horizontally */
+        }
+
+        .logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            text-decoration: none;
+            color: #090d0e;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-left: 20px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ecf0f1;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Energy Grid App</h1>
+    
+    <a href="{{ url_for('login1') }}" class="logout-button">Logout</a>
+    <!-- Add buttons to navigate to each query page dynamically -->
+    <div class="btn-container">
+        {% set custom_messages = ["To retrieve all data related to customers within the pincode '37625' (Simple Query)",
+         "To retrieve details on the supplier, their address, the contract between the supplier and the main energy grid, while mentioning the type of energy in the grid.",
+         "To retrieve a list of grids along with their details, that are utilising the energy type 'wind' to source their energy (Using Inner Join)",
+         "Retrieve each type of contract, count for each type.",
+         "Retrieve top 5 utility company names, and their total billing cost",
+         "To check for the number of households that utilize specific type of energies in the area with pincode '38001' (Aggregate)",
+         "Retrieve the extracted Business Type, the count of people, and the sum of cost for the extracted business type for each customer (In this case sports)",
+         "Retrieve each type of business, total number of people for each type of business, and the total cost for each type of business",
+         "To retrieve all contracts where the VolageLevel in the Electricity Grid is greater than 50 (Nested Query)",
+         "To retrieve all customers who utilise energy as a business (SubQuery)",
+         "To find all contracts and the corresponding utility companies where the contract cost is greater than the average cost of all contracts (Subquery in the FROM clause)",
+         "To retrieve the companies and their total costs (Correlated Query)",
+         "To retrieve the customers who are residential, where the number of people is atleast 8 (Using >= ALL)",
+         "Find the gas grids with a flow capacity greater than any of the flow capacities of water grids (Using >ANY)",
+         "To retrieve the utility companies where they are connected with the main energy grid (Using Exists)",
+         "Find all electricity grids where no government regulations are associated. (Using Not Exists)",
+         "Get all distinct customers who are both residential and business (Set Operation (Union))"] %}
+        {% for query_num in range(1, 18) %}
+            <a href="{{ url_for('query{}_results'.format(query_num)) }}" class="btn">Query {{ query_num }}
+                <span class="tooltip">{{ custom_messages[query_num-1] }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</body>
+</html>
